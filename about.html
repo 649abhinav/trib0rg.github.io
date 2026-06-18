@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abhinav Choudhary — Security Researcher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Familjen+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0c0e;
+    --bg2:#121214;
+    --panel:#161619;
+    --line:#26262d;
+    --line-soft:#1d1d22;
+    --ink:#ece7de;
+    --dim:#9a948b;
+    --faint:#615b52;
+    --amber:#f0a830;
+    --amber-deep:#c9831a;
+    --rust:#d6663f;
+    --mono:'JetBrains Mono',monospace;
+    --disp:'Inter',var(--body);
+    --body:'Familjen Grotesk',system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--ink);font-family:var(--body);
+    line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  /* film grain + glow */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+    background:
+      radial-gradient(620px 420px at 88% -8%, rgba(240,168,48,.10), transparent 62%),
+      radial-gradient(560px 380px at -8% 108%, rgba(214,102,63,.07), transparent 60%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 28px}
+
+  /* ── nav ── */
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:26px 0;font-family:var(--mono);font-size:13px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .wordmark{font-family:var(--mono);font-weight:700;letter-spacing:.5px;color:var(--ink);font-size:14px}
+  .wordmark b{color:var(--amber)}
+  nav .links a{color:var(--dim);text-decoration:none;margin-left:24px;transition:color .2s;position:relative}
+  nav .links a:hover{color:var(--amber)}
+  @media(max-width:560px){nav .links a{margin-left:15px;font-size:12px}}
+
+  /* ── hero ── */
+  header.hero{padding:78px 0 64px}
+  .byline{
+    font-family:var(--mono);font-size:12.5px;color:var(--amber);
+    letter-spacing:1.5px;text-transform:uppercase;margin-bottom:30px;
+    display:flex;align-items:center;gap:11px;
+  }
+  .byline .blink{width:7px;height:14px;background:var(--amber);display:inline-block;
+    animation:blink 1.2s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .thesis{
+    font-family:var(--body);font-weight:600;letter-spacing:-.3px;
+    font-size:clamp(20px,2.8vw,30px);line-height:1.15;max-width:14ch;margin-bottom:28px;
+  }
+  .thesis em{font-style:normal;color:var(--amber);position:relative;white-space:nowrap}
+  .thesis em::after{content:"";position:absolute;left:0;right:0;bottom:.08em;height:.09em;
+    background:var(--rust);opacity:.7}
+  .sig{
+    font-family:var(--mono);font-size:13.5px;color:var(--dim);margin-bottom:26px;
+    display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;
+  }
+  .sig .who{color:var(--ink);font-weight:500}
+  .sig .sep{color:var(--faint)}
+  .lede{font-size:clamp(15px,2vw,17.5px);color:var(--dim);max-width:600px}
+  .lede strong{color:var(--ink);font-weight:600}
+
+  /* ── meta rail ── */
+  .rail{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:46px;
+    border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--panel);
+  }
+  .rail .cell{padding:20px 22px;border-right:1px solid var(--line)}
+  .rail .cell:last-child{border-right:none}
+  .rail .n{font-family:var(--mono);font-size:23px;font-weight:700;color:var(--amber);letter-spacing:-.5px}
+  .rail .l{font-size:12px;color:var(--faint);margin-top:5px;font-family:var(--mono)}
+  @media(max-width:680px){.rail{grid-template-columns:repeat(2,1fr)}
+    .rail .cell:nth-child(2){border-right:none}
+    .rail .cell:nth-child(1),.rail .cell:nth-child(2){border-bottom:1px solid var(--line)}}
+
+  /* ── sections ── */
+  section{padding:48px 0;border-top:1px solid var(--line-soft)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:34px}
+  .sec-tag{font-family:var(--mono);font-size:12px;color:var(--amber-deep);letter-spacing:1px}
+  .sec-title{font-family:var(--disp);font-size:clamp(19px,2.8vw,24px);font-weight:600;letter-spacing:-.2px}
+
+  /* ── focus ── */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--line);border-radius:13px;overflow:hidden}
+  @media(max-width:600px){.grid{grid-template-columns:1fr}}
+  .card{padding:26px 24px;background:var(--panel);border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .25s}
+  .grid .card:nth-child(2n){border-right:none}
+  .grid .card:nth-last-child(-n+2){border-bottom:none}
+  @media(max-width:600px){.card{border-right:none}.grid .card:last-child{border-bottom:none}}
+  .card:hover{background:#1a1a1e}
+  .card .cx{font-family:var(--mono);font-size:12px;color:var(--faint)}
+  .card h3{font-family:var(--disp);font-size:16px;color:var(--ink);margin:8px 0 9px;font-weight:600}
+  .card p{font-size:14px;color:var(--dim)}
+
+  /* ── principles (signature) ── */
+  .principles{display:flex;flex-direction:column}
+  .pr{
+    display:grid;grid-template-columns:44px 1fr;gap:16px;padding:14px 0;
+    border-top:1px solid var(--line-soft);align-items:start;
+  }
+  .pr:first-child{border-top:none}
+  .pr .k{font-family:var(--mono);font-size:11px;color:var(--amber);padding-top:3px}
+  .pr .v h4{font-family:var(--body);font-size:15px;font-weight:600;letter-spacing:0;margin-bottom:4px}
+  .pr .v p{font-size:13px;color:var(--dim);max-width:62ch}
+  .pr:hover .k{color:var(--rust)}
+
+  /* ── tools (clickable) ── */
+  .tools{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:13px;overflow:hidden}
+  .tool{
+    display:grid;grid-template-columns:170px 1fr 28px;gap:18px;align-items:center;
+    padding:20px 22px;background:var(--panel);border-bottom:1px solid var(--line);
+    text-decoration:none;color:inherit;transition:background .2s;
+  }
+  .tool:last-child{border-bottom:none}
+  .tool:hover{background:#1a1a1e}
+  .tool .nm{font-family:var(--mono);color:var(--amber);font-size:15px;font-weight:500}
+  .tool:hover .nm{color:var(--rust)}
+  .tool .ds{font-size:13.5px;color:var(--dim)}
+  .tool .go{font-family:var(--mono);color:var(--faint);font-size:16px;text-align:right;transition:transform .2s,color .2s}
+  .tool:hover .go{color:var(--amber);transform:translate(2px,-2px)}
+  @media(max-width:600px){.tool{grid-template-columns:1fr 24px;gap:5px}
+    .tool .ds{grid-column:1/-1}}
+
+  /* ── writing ── */
+  .posts{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:13px;overflow:hidden}
+  .post{
+    display:flex;justify-content:space-between;align-items:center;gap:16px;
+    padding:22px 24px;background:var(--panel);border-bottom:1px solid var(--line);
+    text-decoration:none;color:inherit;transition:background .2s;
+  }
+  .post:last-child{border-bottom:none}
+  .post:hover{background:#1a1a1e}
+  .post .pt{font-family:var(--disp);font-size:15.5px;font-weight:600}
+  .post .pm{font-family:var(--mono);font-size:12px;color:var(--faint);margin-top:4px}
+  .post .arr{color:var(--amber);font-family:var(--mono);font-size:17px;flex-shrink:0;transition:transform .2s}
+  .post:hover .arr{transform:translate(3px,-3px);color:var(--rust)}
+
+  /* ── connect ── */
+  .connect{display:flex;flex-wrap:wrap;gap:11px}
+  .connect a{
+    font-family:var(--mono);font-size:13.5px;text-decoration:none;color:var(--ink);
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:13px 17px;transition:all .2s;display:flex;align-items:center;gap:9px;
+  }
+  .connect a:hover{border-color:var(--amber);color:var(--amber);transform:translateY(-2px)}
+  .connect a .pfx{color:var(--faint)}
+  .connect a:hover .pfx{color:var(--amber-deep)}
+
+  footer{padding:46px 0 64px;border-top:1px solid var(--line-soft);margin-top:24px}
+  footer .ft{font-family:var(--mono);font-size:12px;color:var(--faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  footer .ft .amb{color:var(--amber-deep)}
+
+  ::selection{background:var(--amber);color:var(--bg)}
+  a:focus-visible,.tool:focus-visible,.post:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:4px}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav>
+    <span class="wordmark">abhinav<b>.</b>sec</span>
+    <span class="links">
+      <a href="#focus">focus</a>
+      <a href="#work">methodology</a>
+      <a href="#tools">tools</a>
+      <a href="#writing">writing</a>
+      <a href="#connect">connect</a>
+    </span>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="byline"><span class="blink"></span>security researcher · bug bounty hunter</div>
+    <h1 class="thesis">Abhinav<br><em>Choudhary</em></h1>
+    <p class="sig">
+      <span class="who">AppSec</span>
+      <span class="sep">/</span> LLM Security
+      <span class="sep">/</span> Red Team
+    </p>
+    <p class="lede">
+      Five years deep in <strong>bug bounty, CTF, and independent research</strong> — hunting
+      vulnerabilities across web platforms, APIs, and LLM-powered apps. I like going deep into a
+      target: <strong>reading the docs thoroughly</strong> and surfacing the
+      <strong>logical issues that automated tools and AI miss</strong>.
+    </p>
+
+    <div class="rail">
+      <div class="cell"><div class="n">5 yrs</div><div class="l">bbp · ctf · research</div></div>
+      <div class="cell"><div class="n">~30</div><div class="l">companies secured</div></div>
+      <div class="cell"><div class="n">600+</div><div class="l">h1 reputation</div></div>
+      <div class="cell"><div class="n">5</div><div class="l">tools designed</div></div>
+    </div>
+  </header>
+
+  <section id="focus">
+    <div class="sec-head"><span class="sec-tag">[ focus ]</span><h2 class="sec-title">What I work on</h2></div>
+    <div class="grid">
+      <div class="card">
+        <span class="cx">// ai_llm</span>
+        <h3>AI &amp; LLM Security</h3>
+        <p>Prompt injection, jailbreaks, and guardrail bypass across AI-powered features — plus autonomous hunting workflows driven by AI agents.</p>
+      </div>
+      <div class="card">
+        <span class="cx">// web_api</span>
+        <h3>Web &amp; API</h3>
+        <p>OAuth/SAML auth flaws, broken access control, business-logic abuse, and GraphQL / REST authorization issues.</p>
+      </div>
+      <div class="card">
+        <span class="cx">// client_side</span>
+        <h3>Client-Side</h3>
+        <p>PostMessage sinks, prototype pollution, DOM XSS, CSPT, JSON type confusion, and framework template injection.</p>
+      </div>
+      <div class="card">
+        <span class="cx">// mobile_static</span>
+        <h3>Mobile &amp; Static</h3>
+        <p>Android APK assessment with Frida &amp; Objection, deeplink injection, and CodeQL / Semgrep / Snyk query analysis.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="sec-head"><span class="sec-tag">[ method ]</span><h2 class="sec-title">Methodology</h2></div>
+    <div class="principles">
+      <div class="pr">
+        <div class="k">A1</div>
+        <div class="v"><h4>Impact over volume.</h4>
+          <p>One account-takeover beats fifty low-severity headers. I chase the bugs that actually move risk — auth bypass, logic flaws, data exposure.</p></div>
+      </div>
+      <div class="pr">
+        <div class="k">A2</div>
+        <div class="v"><h4>Read the source.</h4>
+          <p>Most logic bugs hide in code, not traffic. Static analysis with CodeQL and Semgrep does half the work before a single request goes out.</p></div>
+      </div>
+      <div class="pr">
+        <div class="k">A3</div>
+        <div class="v"><h4>AI is just another attack surface.</h4>
+          <p>Prompt injection is the new injection; guardrails are the new WAF. I treat LLM features like any other untrusted boundary — and probe accordingly.</p></div>
+      </div>
+      <div class="pr">
+        <div class="k">A4</div>
+        <div class="v"><h4>Do automation, not dependency on it.</h4>
+          <p>I design tooling to handle the repetitive layer — recon, payload generation, batching — so my focus stays on the logic problems that require actual thinking.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tools">
+    <div class="sec-head"><span class="sec-tag">[ design ]</span><h2 class="sec-title">Tools I designed</h2></div>
+    <div class="tools">
+      <a class="tool" href="https://github.com/649abhinav/asciiSiphoner" target="_blank" rel="noopener">
+        <span class="nm">asciiSiphoner</span>
+        <span class="ds">Invisible Unicode/Punycode payloads that bypass LLM guardrails, input filters &amp; validation.</span>
+        <span class="go">↗</span>
+      </a>
+      <a class="tool" href="https://github.com/649abhinav/DepChecker" target="_blank" rel="noopener">
+        <span class="nm">DepChecker</span>
+        <span class="ds">Finds claimable npm dependencies vulnerable to dependency-confusion attacks.</span>
+        <span class="go">↗</span>
+      </a>
+      <a class="tool" href="https://github.com/649abhinav/GraphQLxBatching" target="_blank" rel="noopener">
+        <span class="nm">GraphQLxBatching</span>
+        <span class="ds">Burp Suite extension for automated GraphQL alias batching &amp; variable duplication.</span>
+        <span class="go">↗</span>
+      </a>
+      <a class="tool" href="https://github.com/649abhinav/Headerposioning" target="_blank" rel="noopener">
+        <span class="nm">Headerposioning</span>
+        <span class="ds">Host header, CORS &amp; vhost poisoning tooling with OAuth domain-match regex.</span>
+        <span class="go">↗</span>
+      </a>
+      <a class="tool" href="https://github.com/649abhinav/pdfEXP" target="_blank" rel="noopener">
+        <span class="nm">pdfEXP</span>
+        <span class="ds">Generates exploitable PDF samples with arbitrary code via custom annotations.</span>
+        <span class="go">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="writing">
+    <div class="sec-head"><span class="sec-tag">[ notes ]</span><h2 class="sec-title">Writing &amp; research</h2></div>
+    <div class="posts">
+      <a class="post" href="https://649abhinav.github.io/x/report.html" target="_blank" rel="noopener">
+        <span><span class="pt">Security Research Blog</span><br><span class="pm">649abhinav.github.io</span></span>
+        <span class="arr">↗</span>
+      </a>
+      <a class="post" href="https://medium.com/@ngen5296/marriott-uninteresting-get-based-csrf-3bb23c63f955" target="_blank" rel="noopener">
+        <span><span class="pt">Marriott — GET-based CSRF</span><br><span class="pm">medium.com/@ngen5296</span></span>
+        <span class="arr">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="connect">
+    <div class="sec-head"><span class="sec-tag">[ ping ]</span><h2 class="sec-title">Connect</h2></div>
+    <div class="connect">
+      <a href="https://hackerone.com/trib0rg" target="_blank" rel="noopener"><span class="pfx">hackerone/</span>trib0rg</a>
+      <a href="https://github.com/649abhinav" target="_blank" rel="noopener"><span class="pfx">github/</span>649abhinav</a>
+      <a href="https://x.com/abhinav31103851" target="_blank" rel="noopener"><span class="pfx">x/</span>@abhinav31103851</a>
+      <a href="https://www.linkedin.com/in/abhinav-choudhary-562671196/" target="_blank" rel="noopener"><span class="pfx">linkedin/</span>abhinav-choudhary</a>
+      <a href="https://medium.com/@ngen5296" target="_blank" rel="noopener"><span class="pfx">medium/</span>@ngen5296</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="ft">
+      <span>© <span id="yr"></span> Abhinav Choudhary</span>
+      <span><span class="amb">built to break</span> · disclosed to fix</span>
+    </div>
+  </footer>
+
+</div>
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce && 'IntersectionObserver' in window){
+    const io = new IntersectionObserver((es)=>{
+      es.forEach(e=>{ if(e.isIntersecting){ e.target.style.opacity=1; e.target.style.transform='none'; io.unobserve(e.target);} });
+    },{threshold:.06, rootMargin:'0px 0px -4% 0px'});
+    document.querySelectorAll('.rail, .grid, .pr, .tool, .post').forEach((el,i)=>{
+      el.style.opacity=0; el.style.transform='translateY(12px)';
+      el.style.transition='opacity .5s ease '+(i%5*0.04)+'s, transform .5s ease '+(i%5*0.04)+'s';
+      io.observe(el);
+      setTimeout(()=>{ el.style.opacity=1; el.style.transform='none'; }, 1400);
+    });
+  }
+</script>
+</body>
+</html>
